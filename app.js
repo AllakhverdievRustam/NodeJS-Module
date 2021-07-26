@@ -47,6 +47,15 @@ app.delete('/deleteOne', (req, res) => {
   });
 });
 
+// Удаление всех записей
+app.delete('/deleteAll', (req, res) => {
+  Task.remove({}).then(() => {
+    Task.find().then(result => {
+      res.send({data: result});
+    });
+  });
+});
+
 // Редактирование одной записи
 app.patch('/updateOne', (req, res) => {
   Task.updateOne({ _id: req.body._id }, req.body).then(() => {
