@@ -47,6 +47,15 @@ app.delete('/deleteOne', (req, res) => {
   });
 });
 
+// Удаление всех записей
+app.delete('/deleteAll', (req, res) => {
+  Task.remove({}).then(() => {
+    Task.find().then(result => {
+      res.send({data: result});
+    });
+  });
+})
+
 // Редактирование одной записи
 app.patch('/updateOne', (req, res) => {
   Task.updateOne({ _id: req.body._id }, req.body).then(() => {
@@ -54,35 +63,6 @@ app.patch('/updateOne', (req, res) => {
       res.send({data: result});
     });
   });
-})
-
-// app.post('/fullName', (req, res) => {
-//   const result = {};
-//   let resultStr = '';
-//   const str = req.query.fullName;
-
-//   for (let i = 0; i < str.length; i++) {
-//     if (i === 0 || str[i - 1] === ' ') {
-//       resultStr += str[i];
-//     }
-//   }
-
-//   result['result'] = resultStr;
-
-//   res.send(result);
-// });
-
-app.post('/newArray', (req, res) => {
-  const result = {};
-  let resultArr = [];
-
-  for (let i = 0; i < req.query.count; i++) {
-    resultArr[i] = Math.random();
-  }
-
-  result['result'] = resultArr;
-
-  res.send(result);
 });
 
 // Слушатель
