@@ -56,22 +56,6 @@ app.patch('/updateOne', (req, res) => {
   });
 })
 
-// app.post('/fullName', (req, res) => {
-//   const result = {};
-//   let resultStr = '';
-//   const str = req.query.fullName;
-
-//   for (let i = 0; i < str.length; i++) {
-//     if (i === 0 || str[i - 1] === ' ') {
-//       resultStr += str[i];
-//     }
-//   }
-
-//   result['result'] = resultStr;
-
-//   res.send(result);
-// });
-
 app.post('/newArray', (req, res) => {
   const result = {};
   let resultArr = [];
