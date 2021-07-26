@@ -1,7 +1,11 @@
 const express = require('express'); // Подключаем к переменной express модуль express
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 const app = express(); // app стала переменной для создания запросов
 const Schema = mongoose.Schema;
+app.use(express.json());
+app.use(cors());
 
 // Создаем схему, как будут храниться данные
 const taskSchema = new Schema({
@@ -18,12 +22,9 @@ mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 const Task = mongoose.model("tasks", taskSchema);
 
 // Запросы
-// Добавление
+// Добавление новой задачи
 app.post('/createNewTask', (req, res) => {
-  const task = new Task({
-    text: 'Task 2',
-    isCheck: false
-  });
+  const task = new Task(req.body);
   
   task.save().then(result => {
     res.send(result);
@@ -46,14 +47,9 @@ app.delete('/deleteOne', (req, res) => {
   });
 });
 
-// Удаление всех записей
-// app.delete('/deleteMany', (req, res) => {
-//   Task.deleteMany({})
-// })
-
 // Редактирование одной записи
 app.patch('/updateOne', (req, res) => {
-  Task.updateOne({ _id: req.query._id }, { text: "Test 4" }).then(() => {
+  Task.updateOne({ _id: req.body._id }, req.body).then(() => {
     Task.find().then(result => {
       res.send({data: result});
     });
