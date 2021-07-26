@@ -1,14 +1,64 @@
 const express = require('express'); // Подключаем к переменной express модуль express
+const mongoose = require('mongoose');
 const app = express(); // app стала переменной для создания запросов
+const Schema = mongoose.Schema;
 
-// Запрос get
-// app.get('/', (req, res) => {
-//   res.send('Hello people!');
-// });
+// Создаем схему, как будут храниться данные
+const taskSchema = new Schema({
+  text: String,
+  isCheck: Boolean
+});
 
-// app.get('/paramRequest', (req, res) => {
-//   res.send(req.query);
-// });
+// Подключение БД к проекту
+const url = "mongodb+srv://Rustam:1234qwer@clustertodolist.yc1fu.mongodb.net/To_Do_List?retryWrites=true&w=majority";
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// Модель для работы с таблицей в самой БД
+// В mongoose создаем модель по таблице "tasks" по схеме taskSchema
+const Task = mongoose.model("tasks", taskSchema);
+
+// Запросы
+// Добавление
+app.post('/createNewTask', (req, res) => {
+  const task = new Task({
+    text: 'Task 2',
+    isCheck: false
+  });
+  
+  task.save().then(result => {
+    res.send(result);
+  });
+});
+
+// Вывод всех данных
+app.get('/getData', (req, res) => {
+  Task.find().then(result => {
+    res.send({data: result});
+  });
+});
+
+// Удаление одной записи
+app.delete('/deleteOne', (req, res) => {
+  Task.deleteOne({ _id: req.query._id }).then(() => {
+    Task.find().then(result => {
+      res.send({data: result});
+    });
+  });
+});
+
+// Удаление всех записей
+// app.delete('/deleteMany', (req, res) => {
+//   Task.deleteMany({})
+// })
+
+// Редактирование одной записи
+app.patch('/updateOne', (req, res) => {
+  Task.updateOne({ _id: req.query._id }, { text: "Test 4" }).then(() => {
+    Task.find().then(result => {
+      res.send({data: result});
+    });
+  });
+})
 
 // app.post('/fullName', (req, res) => {
 //   const result = {};
