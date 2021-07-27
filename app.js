@@ -47,6 +47,15 @@ app.delete('/deleteOne', (req, res) => {
   });
 });
 
+// Удаление всех записей
+app.delete('/deleteAll', (req, res) => {
+  Task.remove({}).then(() => {
+    Task.find().then(result => {
+      res.send({data: result});
+    });
+  });
+});
+
 // Редактирование одной записи
 app.patch('/updateOne', (req, res) => {
   Task.updateOne({ _id: req.body._id }, req.body).then(() => {
@@ -55,22 +64,6 @@ app.patch('/updateOne', (req, res) => {
     });
   });
 })
-
-// app.post('/fullName', (req, res) => {
-//   const result = {};
-//   let resultStr = '';
-//   const str = req.query.fullName;
-
-//   for (let i = 0; i < str.length; i++) {
-//     if (i === 0 || str[i - 1] === ' ') {
-//       resultStr += str[i];
-//     }
-//   }
-
-//   result['result'] = resultStr;
-
-//   res.send(result);
-// });
 
 app.post('/newArray', (req, res) => {
   const result = {};
